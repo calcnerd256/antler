@@ -1,0 +1,70 @@
+<html>
+ <head>
+  <style>
+   *{
+    border: 1px solid black;
+    margin: -1px;
+    padding: 0;
+   }
+  </style>
+  <script src="antlerViz.js"></script>
+  <script>
+   /*
+ideas coming from everywhere
+a toolbox with closures instead of console.log, so I can use behaviors of things that were delivered asynchronously
+a visual representation of objects with fields, such that I can invoke methods by passing arguments to them from the toolbox
+proxy objects for a node server, nowJS-style
+   */
+   function init(){
+    var rootViz = applyLiterate(
+     function(x){
+      var s = Math.min(
+       window.innerWidth,
+       window.innerHeight
+      );
+      x.style.width = s + "px";
+      x.style.height = s + "px";
+      getBody().appendChild(x);
+     },
+     document.createElement("div")
+    );
+    function splitAndGetKids(xs){
+     var result = [];
+     for(var i = 0; i < xs.length; i++)
+      (
+       function(ys){
+        result.push(ys[2]);
+        result.push(ys[3]);
+       }
+      )(vertexDom(xs[i], "data:text/html,<body bgcolor=\"#8080ff\"></body>"));
+     return result;
+    }
+    (
+     function(n, f, x){
+      while(n-- > 0)
+       x = f(x);
+      return x;
+     }
+    )(7, splitAndGetKids, [rootViz]);
+    /*alert(
+     applyLiterate(
+      function(x){x.style.border = "1px solid red";},
+      vertexDom(
+       applyLiterate(
+        function(xs){
+         vertexDom(xs[3]);
+        },
+        vertexDom(
+         rootViz
+        )
+       )[2]
+      )[0]
+     )
+    );*/
+   }
+   window.onload = init;
+  </script>
+ </head>
+ <body>
+ </body>
+</html>
